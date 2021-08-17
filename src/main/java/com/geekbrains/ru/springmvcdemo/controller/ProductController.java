@@ -6,10 +6,7 @@ import com.geekbrains.ru.springmvcdemo.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,10 +25,23 @@ public class ProductController {
         return "products";
     }
 
+    @GetMapping("/create-product")
+    public String createAddProductPage(Model model){
+        model.addAttribute("newProduct", new Product());
+
+        return "create-product";
+    }
+
     @GetMapping("/{id}")
     @ResponseBody
     public Product getProductById(@PathVariable Long id){
         return productService.findById(id).get();
+    }
+
+    @PostMapping
+    public String addProduct(@ModelAttribute("newProduct") Product newProduct, Model model) {
+            productService.create(newProduct);
+        return "redirect:/product";
     }
 
 }

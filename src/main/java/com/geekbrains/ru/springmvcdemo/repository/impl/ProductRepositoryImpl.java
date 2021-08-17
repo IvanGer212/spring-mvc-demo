@@ -5,22 +5,22 @@ import com.geekbrains.ru.springmvcdemo.repository.ProductRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
     private List<Product> products;
     private final Random random = new Random();
+    private long curIdNumber;
 
     @PostConstruct
     void init(){
         products = new ArrayList<>();
-        for (int i = 1; i <=5 ; i++) {
-            products.add(new Product(i, "Product" + i, random.nextInt()*i*1000));
+
+        for (int i = 0; i <5 ; i++) {
+            curIdNumber++;
+            products.add(new Product(curIdNumber, "Product" + curIdNumber, random.nextInt()*i*1000));
         }
     }
 
@@ -38,4 +38,22 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
         return Optional.empty();
     }
+    @Override
+    public Product add (Product newProduct){
+        Optional<Product> mayBeExistingProd = products.stream()
+                .filter(curProduct -> curProduct.getId() == newProduct.getId())
+                .findFirst();
+
+        if(mayBeExistingProd.isPresent()){
+            Product existingProd = mayBeExistingProd.get();
+            existingProd.setTitle(newProduct.getTitle());
+            existingProd.setCost(newProduct.getCost());
+        }else {
+            curIdNumber++;
+            newProduct.setId(curIdNumber);
+            products.add(newProduct);
+        }
+        return newProduct;
+    }
+
 }
