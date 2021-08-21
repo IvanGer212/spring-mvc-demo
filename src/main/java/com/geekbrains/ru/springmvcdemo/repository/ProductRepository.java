@@ -11,4 +11,6 @@ public interface ProductRepository {
 
     Optional<Product> findById(long id);
 
+    Product add(Product newProduct);
+
 }

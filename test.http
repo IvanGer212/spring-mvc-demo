@@ -13,4 +13,3 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8085/product/2

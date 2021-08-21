@@ -12,4 +12,7 @@ public interface ProductService {
     List<Product> getAll();
 
     Optional<Product> findById(long id);
+
+    Product create(Product product);
+
 }
